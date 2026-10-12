@@ -1,10 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-# Create your models here.
+
+
+def email_validators(value):
+    if not value.endswith('@gmail.com'):
+        raise models.ValidationError("L'adresse e-mail doit se terminer par '@gmail.com'.") 
+
 
 class Utilisateur(AbstractUser):
     user_id = models.CharField(max_length=8,editable=False, primary_key=True)
-    email= models.EmailField(unique=True)
+    email= models.EmailField(unique=True,validators=[email_validators])
     role = models.CharField(max_length = 20 , choices =[('chargeur','chargeur'),('transorteur','transporteur'),('administrateur','administrateur')], default="chargeur")
     created_at = models .DateTimeField(auto_now_add = True)
     updated_at = models .DateTimeField(auto_now = True)
